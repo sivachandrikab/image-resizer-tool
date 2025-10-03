@@ -1,0 +1,40 @@
+import os
+from PIL import Image
+
+def resize_images(input_folder, output_folder, size):
+    """
+    Resize all images in input_folder to the given size and save them to output_folder.
+
+    Parameters:
+    - input_folder: Path to the folder with original images
+    - output_folder: Path to save resized images
+    - size: Tuple (width, height) for the new image size
+    """
+    # Create output folder if it doesn't exist
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    # Supported image extensions
+    valid_extensions = ('.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff')
+
+    for filename in os.listdir(input_folder):
+        if filename.lower().endswith(valid_extensions):
+            img_path = os.path.join(input_folder, filename)
+            with Image.open(img_path) as img:
+                # Resize the image while keeping aspect ratio
+                img.thumbnail(size)
+
+                # Save the resized image
+                save_path = os.path.join(output_folder, filename)
+                img.save(save_path)
+                print(f"Resized and saved: {save_path}")
+
+if __name__ == "__main__":
+    # Folder with original images
+    input_folder = "images_original"
+    # Folder to save resized images
+    output_folder = "images_resized"
+    # Desired max size (width, height)
+    max_size = (800, 800)
+
+    resize_images(input_folder, output_folder, max_size)
